@@ -8,8 +8,16 @@ import jp.digitalrabbit.reduxsample.R
 import jp.digitalrabbit.reduxsample.MainViewModel
 import jp.digitalrabbit.reduxsample.databinding.ActivityMainBinding
 
+/**
+ * Main activity.
+ */
 class MainActivity : AppCompatActivity() {
 
+    /**
+     * 起動処理.
+     *
+     * @param savedInstanceState 再起動時 Bundle 情報
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
