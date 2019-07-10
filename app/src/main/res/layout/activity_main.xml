@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+
+        <import type="jp.digitalrabbit.reduxsample.ui.TextEditController"/>
+
+        <variable
+                name="viewModel"
+                type="jp.digitalrabbit.reduxsample.MainViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.MainActivity">
+
+        <TextView
+                android:id="@+id/content"
+                android:text="@{viewModel.data.text}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@id/editText"/>
+        <EditText
+                android:text="@={viewModel.editText}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/editText"
+                app:layout_constraintBottom_toTopOf="@id/btn_update"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        <Button
+                android:text="@string/btn_update"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_update"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:onClick="@{() -> TextEditController.update(viewModel.editText,viewModel.store)}"
+                app:layout_constraintEnd_toStartOf="@+id/btn_del"/>
+        <Button
+                android:id="@+id/btn_del"
+                android:text="@string/btn_del"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="@{()-> TextEditController.delete(viewModel.store)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_update"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,53 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'org.jetbrains.dokka'
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    // -- Core library --
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-jdk7
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.41"
+    // https://developer.android.com/jetpack/androidx/releases/annotation
+    implementation 'androidx.annotation:annotation:1.1.0'
+
+    // -- Kotlin coroutines library --
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-M2"
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-android
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0-M2"
+
+    // Test library
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.3.0-alpha01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-alpha01'
+}
+
+repositories {
+    google()
+    mavenCentral()
+    jcenter()
+}
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$rootDir/kdoc/$moduleName"
+}
