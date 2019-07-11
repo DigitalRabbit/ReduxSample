@@ -1,16 +1,14 @@
 package jp.digitalrabbit.reduxsample
 
 import android.util.Log
-import jp.digitalrabbit.redux.Action
-import jp.digitalrabbit.redux.Middleware
-import jp.digitalrabbit.redux.Store
+import jp.digitalrabbit.redux.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 
 /**
  * 同期 middleware サンプル.
  */
-class SyncMiddleware : Middleware() {
+class LogOutput : SyncMiddleware {
     /**
      * 同期処理.
      *
@@ -20,7 +18,7 @@ class SyncMiddleware : Middleware() {
      * @param action    状態変更指示 Action
      * @param next      次の処理への Dispatcher
      */
-    override fun syncExecute(store: Store, action: Action, next: (Action) -> Unit) {
+    override fun execute(store: Store, action: Action, next: (Action) -> Unit) {
         Log.d("SyncMiddleware", "syncExecute start.")
         next(action)
         Log.d("SyncMiddleware", "syncExecute end.")
@@ -30,7 +28,7 @@ class SyncMiddleware : Middleware() {
 /**
  * 非同期 middleware サンプル.
  */
-class AsyncMiddleware(scope: CoroutineScope) : Middleware(scope) {
+class DelayOutput : AsyncMiddleware {
     /**
      * 非同期処理.
      *

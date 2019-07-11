@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import jp.digitalrabbit.redux.Action
 import jp.digitalrabbit.redux.State
 import jp.digitalrabbit.redux.Store
-import kotlinx.coroutines.*
 
 /**
  * MainActivity 用 ViewModel
@@ -43,11 +42,6 @@ class MainViewModel : ViewModel() {
     private val unsubscribe = store.subscribe(observer)
 
     /**
-     * Middleware 非同期処理用 coroutine scope.
-     */
-    private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
-
-    /**
      * EditText に入力された文字列保管用
      */
     @Bindable
@@ -55,7 +49,7 @@ class MainViewModel : ViewModel() {
 
     init {
         // Store へ Middleware を適用
-        store.applyMiddleware(SyncMiddleware(), AsyncMiddleware(scope))
+        store.applyMiddleware(LogOutput(), DelayOutput())
     }
 
     /**
@@ -67,7 +61,7 @@ class MainViewModel : ViewModel() {
         super.onCleared()
 
         unsubscribe()
-        scope.coroutineContext.cancelChildren()
+        store.cancel()
     }
 }
 
