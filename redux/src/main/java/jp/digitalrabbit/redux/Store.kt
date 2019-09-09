@@ -116,8 +116,8 @@ class Store(
     private fun dispatchImpl(action: Action) {
         val new = reducer(action, state)
         if (new !== state) {
-            state = new
             observers.forEach { it(new) }
+            state = new
         }
     }
 
