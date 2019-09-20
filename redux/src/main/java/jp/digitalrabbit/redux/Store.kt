@@ -1,6 +1,8 @@
 package jp.digitalrabbit.redux
 
 import kotlinx.coroutines.*
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 /**
  * Redux アーキテクチャ向け Store class.
@@ -36,9 +38,7 @@ class Store(
      * 外部からは参照のみ可能。
      */
     var state: State = initialState
-        private set(value) {
-            field = value
-        }
+        private set
 
     /**
      * Middleware リスト.
@@ -53,6 +53,13 @@ class Store(
      * 変更を観察する observer のリスト.
      */
     private val observers = mutableListOf<Observer>()
+
+    /**
+     * ロックオブジェクト
+     *
+     * dispatch をシーケンシャルに動かすための Lock オブジェクト.
+     */
+    private val lock = ReentrantLock()
 
     /**
      * Middleware 登録.
@@ -87,12 +94,14 @@ class Store(
      * @param action    状態変更支持 Action
      */
     fun dispatch(action: Action) {
-        scope.launch {
-            var dispatcher = { act: Action -> dispatchImpl(act) }
-            for (middleware in middlewares.reversed()) {
-                dispatcher = generateFunc(middleware, this@Store, dispatcher)
+        lock.withLock {
+            scope.launch {
+                var dispatcher = { act: Action -> dispatchImpl(act) }
+                for (middleware in middlewares.reversed()) {
+                    dispatcher = generateFunc(middleware, this@Store, dispatcher)
+                }
+                dispatcher.invoke(action)
             }
-            dispatcher.invoke(action)
         }
     }
 
